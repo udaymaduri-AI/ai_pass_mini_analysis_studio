@@ -96,19 +96,28 @@ if "date_column" not in st.session_state:
 @st.cache_data
 def load_sample_data():
     """Load the built-in energy dataset"""
-    try:
-        import os
-        import pathlib
-        # Works on both local and Streamlit Cloud
-        base_dir = pathlib.Path(__file__).parent.resolve()
-        csv_path = base_dir / 'data' / 'sample_energy_data.csv'
-        df = pd.read_csv(str(csv_path))
-        if 'date' in df.columns:
-            df['date'] = pd.to_datetime(df['date'])
-        return df
-    except Exception as e:
-        st.error(f"Error loading sample data: {e}")
-        return None
+    import os
+
+    # Try multiple paths to handle local, Streamlit Cloud, and different repo structures
+    possible_paths = [
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'sample_energy_data.csv'),
+        os.path.join('.', 'data', 'sample_energy_data.csv'),
+        os.path.join(os.getcwd(), 'data', 'sample_energy_data.csv'),
+        'data/sample_energy_data.csv',
+    ]
+
+    for csv_path in possible_paths:
+        if os.path.exists(csv_path):
+            try:
+                df = pd.read_csv(csv_path)
+                if 'date' in df.columns:
+                    df['date'] = pd.to_datetime(df['date'])
+                return df
+            except Exception as e:
+                continue
+
+    st.error("Could not find sample_energy_data.csv. Make sure the 'data/' folder is in your GitHub repo.")
+    return None
 
 
 def detect_date_column(df):
