@@ -95,10 +95,9 @@ if "date_column" not in st.session_state:
 
 @st.cache_data
 def load_sample_data():
-    """Load the built-in energy dataset"""
+    """Load sample energy dataset (file OR fallback synthetic data)"""
     import os
 
-    # Try multiple paths to handle local, Streamlit Cloud, and different repo structures
     possible_paths = [
         os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'sample_energy_data.csv'),
         os.path.join('.', 'data', 'sample_energy_data.csv'),
@@ -106,6 +105,7 @@ def load_sample_data():
         'data/sample_energy_data.csv',
     ]
 
+    # Try loading from file
     for csv_path in possible_paths:
         if os.path.exists(csv_path):
             try:
@@ -113,11 +113,22 @@ def load_sample_data():
                 if 'date' in df.columns:
                     df['date'] = pd.to_datetime(df['date'])
                 return df
-            except Exception as e:
+            except Exception:
                 continue
 
-    st.error("Could not find sample_energy_data.csv. Make sure the 'data/' folder is in your GitHub repo.")
-    return None
+    # ✅ FALLBACK (IMPORTANT FIX)
+    st.warning("Sample file not found. Using generated dataset instead.")
+
+    # Generate synthetic energy dataset
+    dates = pd.date_range(start="2023-01-01", periods=100)
+    energy = np.random.normal(loc=100, scale=15, size=100)
+
+    df = pd.DataFrame({
+        "date": dates,
+        "energy_consumption": energy
+    })
+
+    return df
 
 
 def detect_date_column(df):
