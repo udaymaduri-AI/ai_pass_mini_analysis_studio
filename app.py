@@ -15,80 +15,76 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Page configuration
+st.set_page_config(
+    page_title="AI-Pass Analysis Studio",
+    layout="wide",
+    page_icon="📊",
+    initial_sidebar_state="expanded"
+)
+
+# Custom CSS for styling
 st.markdown("""
-<style>
-    .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 20px;
-        border-radius: 10px;
-        color: white;
-        text-align: center;
-    }
-
-    /* FIXED: High priority */
-    .insight-high {
-        background-color: #fdecea;
-        border-left: 4px solid #d32f2f;
-        padding: 12px;
-        border-radius: 6px;
-        margin: 8px 0;
-        color: #000000;   /* FIX: text visible */
-    }
-
-    /* FIXED: Medium priority */
-    .insight-medium {
-        background-color: #fff3e0;
-        border-left: 4px solid #f57c00;
-        padding: 12px;
-        border-radius: 6px;
-        margin: 8px 0;
-        color: #000000;   /* FIX: text visible */
-    }
-
-    /* FIXED: Low priority */
-    .insight-low {
-        background-color: #e8f5e9;
-        border-left: 4px solid #388e3c;
-        padding: 12px;
-        border-radius: 6px;
-        margin: 8px 0;
-        color: #000000;   /* FIX: text visible */
-    }
-
-    /* Badge styling */
-    .badge {
-        display: inline-block;
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 0.85em;
-        font-weight: bold;
-        margin-right: 8px;
-    }
-
-    .badge-high {
-        background-color: #d32f2f;
-        color: white;
-    }
-
-    .badge-medium {
-        background-color: #f57c00;
-        color: white;
-    }
-
-    .badge-low {
-        background-color: #388e3c;
-        color: white;
-    }
-
-    .footer {
-        text-align: center;
-        margin-top: 50px;
-        padding: 20px;
-        border-top: 1px solid #e0e0e0;
-        color: #888;
-        font-size: 0.85em;
-    }
-</style>
+    <style>
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+        .insight-high {
+            background-color: #fee;
+            border-left: 4px solid #d32f2f;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 8px 0;
+            color: #000;
+        }
+        .insight-medium {
+            background-color: #fff3e0;
+            border-left: 4px solid #f57c00;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 8px 0;
+            color: #000;
+        }
+        .insight-low {
+            background-color: #e8f5e9;
+            border-left: 4px solid #388e3c;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 8px 0;
+            color: #000;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .badge-high {
+            background-color: #d32f2f;
+            color: white;
+        }
+        .badge-medium {
+            background-color: #f57c00;
+            color: white;
+        }
+        .badge-low {
+            background-color: #388e3c;
+            color: white;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #888;
+            font-size: 0.85em;
+        }
+    </style>
 """, unsafe_allow_html=True)
 
 # Initialize session state
