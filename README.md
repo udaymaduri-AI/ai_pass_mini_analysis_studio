@@ -2,7 +2,7 @@
 
 **AI-Powered Business Data Analysis Tool**
 
-A Streamlit-based analysis studio that lets users upload data, automatically profile it, detect anomalies, generate insights, and receive business recommendations — all through an interactive web interface.
+A Streamlit-based analysis studio that lets users upload data, automatically profile it, detect anomalies, generate insights, and receive business recommendations, all through an interactive web interface.
 
 Built by **Uday** as part of the 24-Hour Technical Challenge.
 
@@ -137,9 +137,7 @@ AI-pass_Uday/
 ├── data/
 │   └── sample_energy_data.csv    # Sample energy dataset (731 records)
 ├── requirements.txt              # Python dependencies
-├── .streamlit/
-│   └── config.toml               # Streamlit configuration
-├── .gitignore                    # Git ignore rules
+├── config.toml                   # Streamlit configuration
 └── README.md                     # This file
 ```
 
