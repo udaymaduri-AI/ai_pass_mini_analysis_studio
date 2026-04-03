@@ -38,6 +38,7 @@ st.markdown("""
             padding: 12px;
             border-radius: 4px;
             margin: 8px 0;
+            color: #000;
         }
         .insight-medium {
             background-color: #fff3e0;
@@ -45,6 +46,7 @@ st.markdown("""
             padding: 12px;
             border-radius: 4px;
             margin: 8px 0;
+            color: #000;
         }
         .insight-low {
             background-color: #e8f5e9;
@@ -52,6 +54,7 @@ st.markdown("""
             padding: 12px;
             border-radius: 4px;
             margin: 8px 0;
+            color: #000;
         }
         .badge {
             display: inline-block;
