@@ -4,7 +4,7 @@
 
 A Streamlit-based analysis studio that lets users upload data, automatically profile it, detect anomalies, generate insights, and receive business recommendations — all through an interactive web interface.
 
-Built by **Uday** as part of the 24-Hour Technical Challenge (Data Analytics / ML / Data Engineering).
+Built by **Uday** as part of the 24-Hour Technical Challenge.
 
 ---
 
@@ -143,25 +143,7 @@ AI-pass_Uday/
 └── README.md                     # This file
 ```
 
----
 
-## Local Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/AI-pass-Analysis-Studio.git
-cd AI-pass-Analysis-Studio
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the app
-streamlit run app.py
-```
-
-The app opens at `http://localhost:8501`.
-
----
 
 ## Deployment
 
