@@ -1,4 +1,4 @@
-import streamlit as st
+update q&a import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -38,7 +38,6 @@ st.markdown("""
             padding: 12px;
             border-radius: 4px;
             margin: 8px 0;
-            color: #000;
         }
         .insight-medium {
             background-color: #fff3e0;
@@ -46,7 +45,6 @@ st.markdown("""
             padding: 12px;
             border-radius: 4px;
             margin: 8px 0;
-            color: #000;
         }
         .insight-low {
             background-color: #e8f5e9;
@@ -54,7 +52,6 @@ st.markdown("""
             padding: 12px;
             border-radius: 4px;
             margin: 8px 0;
-            color: #000;
         }
         .badge {
             display: inline-block;
@@ -98,9 +95,10 @@ if "date_column" not in st.session_state:
 
 @st.cache_data
 def load_sample_data():
-    """Load sample energy dataset (file OR fallback synthetic data)"""
+    """Load the built-in energy dataset"""
     import os
 
+    # Try multiple paths to handle local, Streamlit Cloud, and different repo structures
     possible_paths = [
         os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'sample_energy_data.csv'),
         os.path.join('.', 'data', 'sample_energy_data.csv'),
@@ -108,7 +106,6 @@ def load_sample_data():
         'data/sample_energy_data.csv',
     ]
 
-    # Try loading from file
     for csv_path in possible_paths:
         if os.path.exists(csv_path):
             try:
@@ -116,22 +113,11 @@ def load_sample_data():
                 if 'date' in df.columns:
                     df['date'] = pd.to_datetime(df['date'])
                 return df
-            except Exception:
+            except Exception as e:
                 continue
 
-    #  FALLBACK 
-    st.warning("Sample file not found. Using generated dataset instead.")
-
-    # Generate synthetic energy dataset
-    dates = pd.date_range(start="2023-01-01", periods=100)
-    energy = np.random.normal(loc=100, scale=15, size=100)
-
-    df = pd.DataFrame({
-        "date": dates,
-        "energy_consumption": energy
-    })
-
-    return df
+    st.error("Could not find sample_energy_data.csv. Make sure the 'data/' folder is in your GitHub repo.")
+    return None
 
 
 def detect_date_column(df):
@@ -373,21 +359,65 @@ def render_home_section():
 
     with col1:
         st.markdown("### Upload Data")
-        uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+        uploaded_file = st.file_uploader(
+            "Choose a file",
+            type=["csv", "xlsx", "xls", "json", "tsv", "txt", "parquet", "png", "jpg", "jpeg", "gif", "bmp", "tiff", "webp", "pdf"]
+        )
 
         if uploaded_file:
+            file_name = uploaded_file.name.lower()
+            df = None
+
             try:
-                df = pd.read_csv(uploaded_file)
+                # CSV / TSV / TXT
+                if file_name.endswith(('.csv', '.tsv', '.txt')):
+                    sep = '\t' if file_name.endswith('.tsv') else ','
+                    df = pd.read_csv(uploaded_file, sep=sep)
 
-                # Auto-detect date columns
-                for col in df.columns:
-                    if col.lower() in ['date', 'timestamp', 'time', 'datetime']:
-                        df[col] = pd.to_datetime(df[col], errors='coerce')
+                # Excel
+                elif file_name.endswith(('.xlsx', '.xls')):
+                    df = pd.read_excel(uploaded_file)
 
-                st.session_state.data = df
-                st.session_state.original_data = df.copy()
-                st.session_state.date_column = detect_date_column(df)
-                st.success("✓ File uploaded successfully!")
+                # JSON
+                elif file_name.endswith('.json'):
+                    df = pd.read_json(uploaded_file)
+
+                # Parquet
+                elif file_name.endswith('.parquet'):
+                    df = pd.read_parquet(uploaded_file)
+
+                # Images
+                elif file_name.endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', '.webp')):
+                    from PIL import Image
+                    img = Image.open(uploaded_file)
+                    st.image(img, caption=uploaded_file.name, use_container_width=True)
+                    st.info(f"Image loaded: {img.size[0]}x{img.size[1]} pixels, mode: {img.mode}")
+                    # Create a simple DataFrame from image metadata
+                    df = pd.DataFrame({
+                        'Property': ['Filename', 'Width', 'Height', 'Mode', 'Format'],
+                        'Value': [uploaded_file.name, img.size[0], img.size[1], img.mode, img.format or 'N/A']
+                    })
+
+                # PDF
+                elif file_name.endswith('.pdf'):
+                    st.info("PDF file uploaded. For tabular analysis, please extract data to CSV/Excel first.")
+                    st.session_state.uploaded_pdf = uploaded_file.read()
+                    st.success(f"✓ PDF '{uploaded_file.name}' uploaded ({len(st.session_state.uploaded_pdf) / 1024:.1f} KB)")
+
+                else:
+                    st.warning(f"File type not supported for data analysis: {file_name}")
+
+                if df is not None:
+                    # Auto-detect date columns
+                    for col in df.columns:
+                        if col.lower() in ['date', 'timestamp', 'time', 'datetime']:
+                            df[col] = pd.to_datetime(df[col], errors='coerce')
+
+                    st.session_state.data = df
+                    st.session_state.original_data = df.copy()
+                    st.session_state.date_column = detect_date_column(df)
+                    st.success(f"✓ {uploaded_file.name} uploaded successfully!")
+
             except Exception as e:
                 st.error(f"Error reading file: {e}")
 
