@@ -119,7 +119,7 @@ def load_sample_data():
             except Exception:
                 continue
 
-    # ✅ FALLBACK (IMPORTANT FIX)
+    #  FALLBACK 
     st.warning("Sample file not found. Using generated dataset instead.")
 
     # Generate synthetic energy dataset
