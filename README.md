@@ -10,9 +10,9 @@ Built by **Uday** as part of the 24-Hour Technical Challenge (Data Analytics / M
 
 ## Live Demo
 
-> **Live App**: _[Add your Streamlit Cloud URL here after deployment]_
+> **Live App**: https://ai-pass-analysis-studio-uday.streamlit.app
 >
-> **GitHub Repo**: _[Add your GitHub repo URL here]_
+> **GitHub Repo**: https://github.com/udaymaduri-AI/ai_pass_mini_analysis_studio
 
 ---
 
@@ -165,7 +165,7 @@ The app opens at `http://localhost:8501`.
 
 ## Deployment
 
-Deployed on **Streamlit Community Cloud**. See `DEPLOYMENT_GUIDE.md` for step-by-step instructions.
+As per requirement application deployed on **Streamlit Community Cloud** 
 
 ---
 
